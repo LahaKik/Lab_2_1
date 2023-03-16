@@ -7,8 +7,6 @@
 #include "WavHeader.h"
 #include <stdexcept>
 
-
-
 using namespace std;
 
 class WavReader
