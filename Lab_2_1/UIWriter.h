@@ -26,14 +26,15 @@ private:
     COORD coordBufSize;
     COORD coordBufCoord;
 
-    void drowHeader(WavHeader header) {
-        
+    void drowHeader(WavHeader header) 
+    {        
         addText(2, 1, "Number of channels - " + to_string(header.numChannels), scrBuff);
         addText(2, 2, "Sample rate - " + to_string(header.sampleRate) + " bits/sec", scrBuff);
         addText(2, 3, "Sound accuracy - " + to_string(header.bitsPerSample) + " bit", scrBuff);
     }
 
-    void addHorizontalLine(int targX, int startY, CHAR_INFO ch, int len, CHAR_INFO* buff) {
+    void addHorizontalLine(int targX, int startY, CHAR_INFO ch, int len, CHAR_INFO* buff) 
+    {
         int shift = targX * 120;
         for (short i = 0; i < len; i++)
         {
@@ -41,14 +42,16 @@ private:
         }
     }  
 
-    void addVerticalLine(int targY, int startX, CHAR_INFO ch, int len, CHAR_INFO* buff) {
+    void addVerticalLine(int targY, int startX, CHAR_INFO ch, int len, CHAR_INFO* buff) 
+    {
         for (short i = 0; i < len; i++)
         {
             *(buff + (i + startX) * width + targY) = ch;
         }
     }
 
-    void addText(int Y, int X, string str, CHAR_INFO* buff) {
+    void addText(int Y, int X, string str, CHAR_INFO* buff) 
+    {
         int shift = X * 120;
         for (short i = 0; i < str.length(); i++)
         {
@@ -59,7 +62,8 @@ private:
         }
     }
 
-    void addHighlightedText(int Y, int X, string str, CHAR_INFO* buff) {
+    void addHighlightedText(int Y, int X, string str, CHAR_INFO* buff) 
+    {
         int shift = X * 120;
         for (short i = 0; i < str.length(); i++)
         {
@@ -91,12 +95,8 @@ private:
         srctReadRect.Bottom = height - 1;
         srctReadRect.Right = width - 1;
 
-
-
         coordBufSize.Y = height;
         coordBufSize.X = width;
-
-
 
         coordBufCoord.X = 0;
         coordBufCoord.Y = 0;
@@ -108,6 +108,26 @@ private:
             &srctReadRect);
     }
 
+    void drowNamesFreq(char offset)
+    {
+        addText(offset + width / 9 * 0, height - 5, "50Hz", scrBuff);
+        addText(offset + width / 9 * 1, height - 5, "100Hz", scrBuff);
+        addText(offset + width / 9 * 2, height - 5, "200Hz", scrBuff);
+        addText(offset + width / 9 * 3, height - 5, "500Hz", scrBuff);
+        addText(offset + width / 9 * 4, height - 5, "1kz", scrBuff);
+        addText(offset + width / 9 * 5, height - 5, "2kz", scrBuff);
+        addText(offset + width / 9 * 6, height - 5, "5kz", scrBuff);
+        addText(offset + width / 9 * 7, height - 5, "10kz", scrBuff);
+        addText(offset + width / 9 * 8, height - 5, "20kz", scrBuff);
+    }
+
+    void drowMenu()
+    {
+        addText(width - 4, height - 2, "->", scrBuff);
+        addText(width / 3 - 6, height - 2, "ESC - exit", scrBuff);
+        addText((width / 3) * 2 - 10, height - 2, "BKSP - Change file", scrBuff);
+        addText(1, height - 2, "<-", scrBuff);
+    }
 
 public:
     UIWriter()
@@ -134,12 +154,8 @@ public:
         srctReadRect.Bottom = height-1;
         srctReadRect.Right = width-1;
 
-
-
         coordBufSize.Y = height;
         coordBufSize.X = width;
-
-
 
         coordBufCoord.X = 0;
         coordBufCoord.Y = 0;
@@ -157,12 +173,8 @@ public:
         srctReadRect.Bottom = height-1;
         srctReadRect.Right = width-1;
 
-
-
         coordBufSize.Y = height;
         coordBufSize.X = width;
-
-
 
         coordBufCoord.X = 0;
         coordBufCoord.Y = 0;
@@ -182,38 +194,22 @@ public:
         addText(width / 2 - 4, 7, to_string(tSec) + '/' + to_string(LenInSec), scrBuff);
 
         char offset = 5;
-        addText(offset + width / 9 * 0, height - 5, "50Hz", scrBuff);
-        addText(offset + width / 9 * 1, height - 5, "100Hz", scrBuff);
-        addText(offset + width / 9 * 2, height - 5, "200Hz", scrBuff);
-        addText(offset + width / 9 * 3, height - 5, "500Hz", scrBuff);
-        addText(offset + width / 9 * 4, height - 5, "1kz", scrBuff);
-        addText(offset + width / 9 * 5, height - 5, "2kz", scrBuff);
-        addText(offset + width / 9 * 6, height - 5, "5kz", scrBuff);
-        addText(offset + width / 9 * 7, height - 5, "10kz", scrBuff);
-        addText(offset + width / 9 * 8, height - 5, "20kz", scrBuff);
-
-        addText(width - 4, height - 2, "->", scrBuff);
-        addText(width / 3 - 6, height - 2, "ESC - exit", scrBuff);
-        addText((width / 3) * 2 - 10, height - 2, "BKSP - Change file", scrBuff);
-        addText(1, height - 2, "<-", scrBuff);
-
+        drowNamesFreq(offset);
+        drowMenu();
         for (short i = 0; i < 9; i++)
         {
             addText(offset + width / 9 * i, 9, to_string((int)round(*(Data + i) * 100)) + '%', scrBuff);
         }
 
-
         CHAR_INFO grafSym;
         grafSym.Char.UnicodeChar = ' ';
         grafSym.Attributes = 0x0010 + 0x0020 + 0x0040;
-
         for (short i = 0; i < 9; i++)
         {
             char verticalLen = int(*(Data + i) * numSegmentsGraph);
             addVerticalLine(offset + (width / 9) * i + 1, height - 7 - verticalLen, grafSym, verticalLen, scrBuff);
             addVerticalLine(offset + (width / 9) * i + 2, height - 7 - verticalLen, grafSym, verticalLen, scrBuff);
         }
-        
 
         Print(scrBuff);
     }
@@ -233,6 +229,8 @@ public:
         Print();
     }
 };
+
+
 
 
 
