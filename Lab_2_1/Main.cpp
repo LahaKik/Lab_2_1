@@ -5,41 +5,98 @@
 #include "UIWriter.h"
 using namespace std;
 
-int main(int argc, char* argv[]) {
+WavReader* EnterPath(WavReader* WR, string& path);
+
+WavReader* CheckPath(WavReader* WR, string& path);
+
+int main(int argc, char* argv[]) 
+{
 	setlocale(LC_ALL, "");
-	string path = argv[1];
-	WavReader WR = WavReader(path);
+	string path;
+	WavReader* WR = nullptr;
+	
+	if (argc >= 2)
+	{
+		path = argv[1];
+		WR = CheckPath(WR, path);
+	}
+	else
+		WR = EnterPath(WR, path);
 
 	UIWriter ui = UIWriter();
 	ui.print();
-	bool k = false;
-	int i = 0;
-	while (!k) {
-		if (i >= WR.lenInSec)
-			i = WR.lenInSec - 1;
-		else if (i < 0)
-			i = 0;
+
+	bool IsExit = false;
+	int second = 0;
+	while (!IsExit) {
+		if (second >= WR->lenInSec)
+			second = WR->lenInSec - 1;
+		else if (second < 0)
+			second = 0;
 		else
-			ui.DrowGraf(WR.GetDataFrequency(i).GetNormData(),WR.GetHeader(), i+1, WR.lenInSec);
+			ui.DrowGraf(WR->GetDataFrequency(second).GetNormData(), WR->GetHeader(), second +1, WR->lenInSec);
+
 		char ch = _getch();
 		if (ch == -32)
 		{
 			ch = _getch();
 			if(ch == 77)
 			{
-				i++;
+				second++;
 				ui.HighlightUI(RightButt);
+				Sleep(25);
 			}
 			if(ch == 75)
 			{
-				i--;
+				second--;
 				ui.HighlightUI(LeftButt);
+				Sleep(25);
 			}
 		}
-
+		if (ch == '\b')
+		{
+			system("cls");
+			second = 0;
+			WR = EnterPath(WR, path);
+		}
 		if (ch == 27)
-			k = true;
-
+			IsExit = true;
 	}
 	system("cls");
+}
+
+WavReader* EnterPath(WavReader* WR, string& path) 
+{
+	bool successReading = false;
+	while (!successReading)
+	{
+		cout << "Enter path to wav-file: ";
+		cin >> path;
+		if (path == "def")
+			path = "C:\\Users\\hotki\\Downloads\\0781.wav";		
+		if (path == "def2")
+			path = "C:\\Users\\hotki\\Downloads\\0783.wav";
+		try
+		{
+			WR = new WavReader(path);
+		}
+		catch (const char* e) {
+			cout << e << endl;
+			continue;
+		}
+		successReading = true;
+	}
+	return WR;
+}
+
+WavReader* CheckPath(WavReader* WR, string& path)
+{
+	try
+	{
+		WR = new WavReader(path);
+	}
+	catch (const char* e) {
+		EnterPath(WR, path);
+	}
+	return WR;
 }

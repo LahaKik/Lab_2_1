@@ -130,7 +130,7 @@
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Graf.h" />
+    <ClInclude Include="Graph.h" />
     <ClInclude Include="UIWriter.h" />
     <ClInclude Include="WavHeader.h" />
     <ClInclude Include="WavReader.h" />

@@ -3,8 +3,10 @@
 #include <string>
 #include <iostream>
 #include <fstream>
-#include "Graf.h"
+#include "Graph.h"
 #include "WavHeader.h"
+#include <stdexcept>
+
 
 
 using namespace std;
@@ -14,7 +16,7 @@ class WavReader
 private:
 	FILE* f;
 	WavHeader header;
-	short* leftCh, * rightCh;
+	short* leftCh = nullptr, * rightCh = nullptr;
 	
 	
 public:
@@ -23,25 +25,16 @@ public:
 	WavReader(string path)
 	{
 		f = fopen(path.c_str(), "rb");
-		fread(&header.chunkId, sizeof(long), 1, f);
-		fread(&header.chunkSize, sizeof(long), 1, f);
-		fread(&header.format, sizeof(long), 1, f);
-		fread(&header.subchunk1Id, sizeof(long), 1, f);
-		fread(&header.subchunk1Size, sizeof(long), 1, f);
-		fread(&header.audioFormat, sizeof(short), 1, f);
-		fread(&header.numChannels, sizeof(short), 1, f);
-		fread(&header.sampleRate, sizeof(long), 1, f);
-		fread(&header.byteRate, sizeof(long), 1, f);
-		fread(&header.blockAlign, sizeof(short), 1, f);
-		fread(&header.bitsPerSample, sizeof(short), 1, f);
-		fread(&header.subchunk2Id, sizeof(long), 1, f);
-		fread(&header.subchunk2Size, sizeof(long), 1, f);
-		//++искать нестандартные хедеры
+		if (!f)
+			throw "Can't open this file\nCheck correctness of the path";
+
+		header.ReadHeader(f);
 
 		lenInSec = header.subchunk2Size / header.byteRate;
 
-		leftCh = new short[header.subchunk2Size/4];
 		rightCh = new short[header.subchunk2Size/4];
+		leftCh = new short[header.subchunk2Size/4];
+
 		for (int i = 0; i < header.subchunk2Size/4; i++)
 		{
 			fread(leftCh+i, sizeof(short), 1, f);
@@ -66,6 +59,7 @@ public:
 			<< "subchunk2Id: " << hex << header.subchunk2Id << endl << dec
 			<< "subchunk2Size: " << header.subchunk2Size << endl;
 	}
+
 	WavHeader GetHeader() {
 		return header;
 	}
@@ -79,7 +73,8 @@ public:
 		}
 		
 	}	
-	Graf GetDataFrequency(int secondsFromStart) 
+
+	Graph GetDataFrequency(int secondsFromStart) 
 	{
 		//cout << "Анализ промежутка..." << endl;
 		int shift = (secondsFromStart * header.byteRate/4);
@@ -128,7 +123,7 @@ public:
 				rangeFrequency[8]++;
 		}
 		
-		Graf graf = Graf(rangeFrequency);
+		Graph graf = Graph(rangeFrequency);
 		return graf;
 	}
 

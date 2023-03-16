@@ -1,10 +1,9 @@
 #pragma once
-class Graf
+class Graph
 {
 private:
 	int* FreqData;
 	float* NormFreqData = new float[9];
-
 
 	void Normalize() {
 		int sum = 0;
@@ -18,15 +17,14 @@ private:
 		}
 	}
 
-
 public:
 
-	Graf(int* Data) {
+	Graph(int* Data) {
 		FreqData = Data;
 		Normalize();
 	}
 
-	~Graf() {
+	~Graph() {
 		delete NormFreqData;
 	}
 	
