@@ -143,12 +143,14 @@ public:
         memcpy(scrBuff, bordBuff, width * height * 4);
     }
 
-    ~UIWriter() {
+    ~UIWriter() 
+    {
         delete[] scrBuff;
         delete[] bordBuff;
     }
 
-    void Print(CHAR_INFO* buff) {
+    void Print(CHAR_INFO* buff) 
+    {
         srctReadRect.Top = 0;
         srctReadRect.Left = 0;
         srctReadRect.Bottom = height-1;
@@ -167,7 +169,8 @@ public:
             &srctReadRect);
     }   
 
-    void Print() {
+    void Print() 
+    {
         srctReadRect.Top = 0;
         srctReadRect.Left = 0;
         srctReadRect.Bottom = height-1;
@@ -186,7 +189,8 @@ public:
             &srctReadRect);
     }
 
-    void DrowGraf(float* Data, WavHeader header, int tSec, int LenInSec) {  
+    void DrowGraf(float* Data, WavHeader header, int tSec, int LenInSec)
+    {  
         memcpy(scrBuff, bordBuff, width * height * 4);
 
         drowHeader(header);
@@ -214,7 +218,8 @@ public:
         Print(scrBuff);
     }
     
-    void HighlightUI(UIPart part) {
+    void HighlightUI(UIPart part) 
+    {
         switch (part)
         {
         case LeftButt:

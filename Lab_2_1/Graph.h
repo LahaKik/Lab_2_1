@@ -19,16 +19,19 @@ private:
 
 public:
 
-	Graph(int* Data) {
+	Graph(int* Data) 
+	{
 		freqData = Data;
 		Normalize();
 	}
 
-	~Graph() {
+	~Graph() 
+	{
 		delete normFreqData;
 	}
 	
-	float* GetNormData() {
+	float* GetNormData() 
+	{
 		return normFreqData;
 	}
 };

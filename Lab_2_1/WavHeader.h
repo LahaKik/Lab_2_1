@@ -4,7 +4,8 @@ struct WavHeader
 	long chunkId, chunkSize, format, subchunk1Id, subchunk1Size, sampleRate, byteRate, subchunk2Id, subchunk2Size;
 	short audioFormat, numChannels, blockAlign, bitsPerSample;
 
-	void ReadHeader(FILE* f) {
+	void ReadHeader(FILE* f) 
+	{
 		fread(&chunkId, sizeof(long), 1, f);
 		fread(&chunkSize, sizeof(long), 1, f);
 		fread(&format, sizeof(long), 1, f);

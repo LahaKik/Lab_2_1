@@ -60,7 +60,8 @@ public:
 			<< "subchunk2Size: " << header.subchunk2Size << endl;
 	}
 
-	WavHeader GetHeader() {
+	WavHeader GetHeader() 
+	{
 		return header;
 	}
 
@@ -127,11 +128,13 @@ public:
 		return graf;
 	}
 
-	void Close() {
+	void Close() 
+	{
 		fcloseall();
 	}
 
-	~WavReader() {
+	~WavReader() 
+	{
 		delete[] leftCh;
 		delete[] rightCh;
 		Close();
