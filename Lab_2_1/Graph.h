@@ -2,34 +2,34 @@
 class Graph
 {
 private:
-	int* FreqData;
-	float* NormFreqData = new float[9];
+	int* freqData;
+	float* normFreqData = new float[9];
 
 	void Normalize() {
 		int sum = 0;
 		for (char i = 0; i < 9; i++)
 		{
-			sum += *(FreqData + i);
+			sum += *(freqData + i);
 		}
 		for (char i = 0; i < 9; i++)
 		{
-			*(NormFreqData + i) = *(FreqData + i) / float(sum);
+			*(normFreqData + i) = *(freqData + i) / float(sum);
 		}
 	}
 
 public:
 
 	Graph(int* Data) {
-		FreqData = Data;
+		freqData = Data;
 		Normalize();
 	}
 
 	~Graph() {
-		delete NormFreqData;
+		delete normFreqData;
 	}
 	
 	float* GetNormData() {
-		return NormFreqData;
+		return normFreqData;
 	}
 };
 

@@ -23,43 +23,43 @@ int main(int argc, char* argv[])
 	else
 		WR = EnterPath(WR, path);
 
-	UIWriter ui = UIWriter();
-	ui.print();
+	UIWriter UI = UIWriter();
+	UI.Print();
 
 	bool IsExit = false;
 	int second = 0;
 	while (!IsExit) {
-		if (second >= WR->lenInSec)
-			second = WR->lenInSec - 1;
+		if (second >= WR->LenInSec)
+			second = WR->LenInSec - 1;
 		else if (second < 0)
 			second = 0;
 		else
-			ui.DrowGraf(WR->GetDataFrequency(second).GetNormData(), WR->GetHeader(), second +1, WR->lenInSec);
+			UI.DrowGraf(WR->GetDataFrequency(second).GetNormData(), WR->GetHeader(), second +1, WR->LenInSec);
 
-		char ch = _getch();
-		if (ch == -32)
+		char inpSym = _getch();
+		if (inpSym == -32)
 		{
-			ch = _getch();
-			if(ch == 77)
+			inpSym = _getch();
+			if(inpSym == 77)
 			{
 				second++;
-				ui.HighlightUI(RightButt);
+				UI.HighlightUI(RightButt);
 				Sleep(25);
 			}
-			if(ch == 75)
+			if(inpSym == 75)
 			{
 				second--;
-				ui.HighlightUI(LeftButt);
+				UI.HighlightUI(LeftButt);
 				Sleep(25);
 			}
 		}
-		if (ch == '\b')
+		if (inpSym == '\b')
 		{
 			system("cls");
 			second = 0;
 			WR = EnterPath(WR, path);
 		}
-		if (ch == 27)
+		if (inpSym == 27)
 			IsExit = true;
 	}
 	system("cls");

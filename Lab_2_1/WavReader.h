@@ -20,7 +20,7 @@ private:
 	
 	
 public:
-	int lenInSec;
+	int LenInSec;
 
 	WavReader(string path)
 	{
@@ -30,7 +30,7 @@ public:
 
 		header.ReadHeader(f);
 
-		lenInSec = header.subchunk2Size / header.byteRate;
+		LenInSec = header.subchunk2Size / header.byteRate;
 
 		rightCh = new short[header.subchunk2Size/4];
 		leftCh = new short[header.subchunk2Size/4];

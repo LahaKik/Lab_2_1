@@ -15,7 +15,7 @@ private:
     //settings
     short width = 120;
     short height = 41;
-    short NumSegmentsGraph = 23;
+    short numSegmentsGraph = 23;
 
     HANDLE tScr = GetStdHandle(STD_OUTPUT_HANDLE);
     CHAR_INFO* scrBuff = new _CHAR_INFO[width*height];
@@ -28,12 +28,12 @@ private:
 
     void drowHeader(WavHeader header) {
         
-        AddText(2, 1, "Number of channels - " + to_string(header.numChannels), scrBuff);
-        AddText(2, 2, "Sample rate - " + to_string(header.sampleRate) + " bits/sec", scrBuff);
-        AddText(2, 3, "Sound accuracy - " + to_string(header.bitsPerSample) + " bit", scrBuff);
+        addText(2, 1, "Number of channels - " + to_string(header.numChannels), scrBuff);
+        addText(2, 2, "Sample rate - " + to_string(header.sampleRate) + " bits/sec", scrBuff);
+        addText(2, 3, "Sound accuracy - " + to_string(header.bitsPerSample) + " bit", scrBuff);
     }
 
-    void AddHorizontalLine(int targX, int startY, CHAR_INFO ch, int len, CHAR_INFO* buff) {
+    void addHorizontalLine(int targX, int startY, CHAR_INFO ch, int len, CHAR_INFO* buff) {
         int shift = targX * 120;
         for (short i = 0; i < len; i++)
         {
@@ -41,14 +41,14 @@ private:
         }
     }  
 
-    void AddVerticalLine(int targY, int startX, CHAR_INFO ch, int len, CHAR_INFO* buff) {
+    void addVerticalLine(int targY, int startX, CHAR_INFO ch, int len, CHAR_INFO* buff) {
         for (short i = 0; i < len; i++)
         {
             *(buff + (i + startX) * width + targY) = ch;
         }
     }
 
-    void AddText(int Y, int X, string str, CHAR_INFO* buff) {
+    void addText(int Y, int X, string str, CHAR_INFO* buff) {
         int shift = X * 120;
         for (short i = 0; i < str.length(); i++)
         {
@@ -59,7 +59,7 @@ private:
         }
     }
 
-    void AddHighlightedText(int Y, int X, string str, CHAR_INFO* buff) {
+    void addHighlightedText(int Y, int X, string str, CHAR_INFO* buff) {
         int shift = X * 120;
         for (short i = 0; i < str.length(); i++)
         {
@@ -70,19 +70,19 @@ private:
         }
     }
 
-    void DrowBorder(CHAR_INFO* buff)
+    void drowBorder(CHAR_INFO* buff)
     {
         CHAR_INFO bordSym;
         bordSym.Attributes = 0x0010 + 0x0040;
         bordSym.Char.UnicodeChar = ' ';
-        AddHorizontalLine(0, 0, bordSym, width, buff);
-        AddVerticalLine(0, 0, bordSym, height, buff);
-        AddVerticalLine(1, 0, bordSym, height, buff);
-        AddHorizontalLine(height - 1, 0, bordSym, width, buff);
-        AddHorizontalLine(5, 0, bordSym, width, buff);
-        AddVerticalLine(width - 1, 0, bordSym, height, buff);
-        AddVerticalLine(width - 2, 0, bordSym, height, buff);
-        AddHorizontalLine(height - 3, 0, bordSym, width, buff);
+        addHorizontalLine(0, 0, bordSym, width, buff);
+        addVerticalLine(0, 0, bordSym, height, buff);
+        addVerticalLine(1, 0, bordSym, height, buff);
+        addHorizontalLine(height - 1, 0, bordSym, width, buff);
+        addHorizontalLine(5, 0, bordSym, width, buff);
+        addVerticalLine(width - 1, 0, bordSym, height, buff);
+        addVerticalLine(width - 2, 0, bordSym, height, buff);
+        addHorizontalLine(height - 3, 0, bordSym, width, buff);
     }
 
     void defineEmpty(CHAR_INFO* buff) {
@@ -119,7 +119,7 @@ public:
 
         defineEmpty(bordBuff);
         defineEmpty(scrBuff);
-        DrowBorder(bordBuff);
+        drowBorder(bordBuff);
         memcpy(scrBuff, bordBuff, width * height * 4);
     }
 
@@ -128,7 +128,7 @@ public:
         delete[] bordBuff;
     }
 
-    void print(CHAR_INFO* buff) {
+    void Print(CHAR_INFO* buff) {
         srctReadRect.Top = 0;
         srctReadRect.Left = 0;
         srctReadRect.Bottom = height-1;
@@ -151,7 +151,7 @@ public:
             &srctReadRect);
     }   
 
-    void print() {
+    void Print() {
         srctReadRect.Top = 0;
         srctReadRect.Left = 0;
         srctReadRect.Bottom = height-1;
@@ -174,32 +174,32 @@ public:
             &srctReadRect);
     }
 
-    void DrowGraf(float* Data, WavHeader header, int tSec, int lenInSec) {  
+    void DrowGraf(float* Data, WavHeader header, int tSec, int LenInSec) {  
         memcpy(scrBuff, bordBuff, width * height * 4);
 
         drowHeader(header);
 
-        AddText(width / 2 - 4, 7, to_string(tSec) + '/' + to_string(lenInSec), scrBuff);
+        addText(width / 2 - 4, 7, to_string(tSec) + '/' + to_string(LenInSec), scrBuff);
 
         char offset = 5;
-        AddText(offset + width / 9 * 0, height - 5, "50Hz", scrBuff);
-        AddText(offset + width / 9 * 1, height - 5, "100Hz", scrBuff);
-        AddText(offset + width / 9 * 2, height - 5, "200Hz", scrBuff);
-        AddText(offset + width / 9 * 3, height - 5, "500Hz", scrBuff);
-        AddText(offset + width / 9 * 4, height - 5, "1kz", scrBuff);
-        AddText(offset + width / 9 * 5, height - 5, "2kz", scrBuff);
-        AddText(offset + width / 9 * 6, height - 5, "5kz", scrBuff);
-        AddText(offset + width / 9 * 7, height - 5, "10kz", scrBuff);
-        AddText(offset + width / 9 * 8, height - 5, "20kz", scrBuff);
+        addText(offset + width / 9 * 0, height - 5, "50Hz", scrBuff);
+        addText(offset + width / 9 * 1, height - 5, "100Hz", scrBuff);
+        addText(offset + width / 9 * 2, height - 5, "200Hz", scrBuff);
+        addText(offset + width / 9 * 3, height - 5, "500Hz", scrBuff);
+        addText(offset + width / 9 * 4, height - 5, "1kz", scrBuff);
+        addText(offset + width / 9 * 5, height - 5, "2kz", scrBuff);
+        addText(offset + width / 9 * 6, height - 5, "5kz", scrBuff);
+        addText(offset + width / 9 * 7, height - 5, "10kz", scrBuff);
+        addText(offset + width / 9 * 8, height - 5, "20kz", scrBuff);
 
-        AddText(width - 4, height - 2, "->", scrBuff);
-        AddText(width / 3 - 6, height - 2, "ESC - exit", scrBuff);
-        AddText((width / 3) * 2 - 10, height - 2, "BKSP - Change file", scrBuff);
-        AddText(1, height - 2, "<-", scrBuff);
+        addText(width - 4, height - 2, "->", scrBuff);
+        addText(width / 3 - 6, height - 2, "ESC - exit", scrBuff);
+        addText((width / 3) * 2 - 10, height - 2, "BKSP - Change file", scrBuff);
+        addText(1, height - 2, "<-", scrBuff);
 
         for (short i = 0; i < 9; i++)
         {
-            AddText(offset + width / 9 * i, 9, to_string((int)round(*(Data + i) * 100)) + '%', scrBuff);
+            addText(offset + width / 9 * i, 9, to_string((int)round(*(Data + i) * 100)) + '%', scrBuff);
         }
 
 
@@ -209,28 +209,28 @@ public:
 
         for (short i = 0; i < 9; i++)
         {
-            char verticalLen = int(*(Data + i) * NumSegmentsGraph);
-            AddVerticalLine(offset + (width / 9) * i + 1, height - 7 - verticalLen, grafSym, verticalLen, scrBuff);
-            AddVerticalLine(offset + (width / 9) * i + 2, height - 7 - verticalLen, grafSym, verticalLen, scrBuff);
+            char verticalLen = int(*(Data + i) * numSegmentsGraph);
+            addVerticalLine(offset + (width / 9) * i + 1, height - 7 - verticalLen, grafSym, verticalLen, scrBuff);
+            addVerticalLine(offset + (width / 9) * i + 2, height - 7 - verticalLen, grafSym, verticalLen, scrBuff);
         }
         
 
-        print(scrBuff);
+        Print(scrBuff);
     }
     
     void HighlightUI(UIPart part) {
         switch (part)
         {
         case LeftButt:
-            AddHighlightedText(1, height - 2, "<-", scrBuff);
+            addHighlightedText(1, height - 2, "<-", scrBuff);
             break;
         case RightButt:
-            AddHighlightedText(width - 4, height - 2, "->", scrBuff);
+            addHighlightedText(width - 4, height - 2, "->", scrBuff);
             break;
         default:
             break;
         }
-        print();
+        Print();
     }
 };
 
