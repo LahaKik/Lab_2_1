@@ -5,7 +5,7 @@ private:
 	int* freqData;
 	float* normFreqData = new float[9];
 
-	void Normalize() {
+	void normalize() {
 		int sum = 0;
 		for (char i = 0; i < 9; i++)
 		{
@@ -22,7 +22,7 @@ public:
 	Graph(int* Data) 
 	{
 		freqData = Data;
-		Normalize();
+		normalize();
 	}
 
 	~Graph() 
