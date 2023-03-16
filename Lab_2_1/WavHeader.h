@@ -39,4 +39,3 @@ struct WavHeader
 		fread(&subchunk2Size, sizeof(long), 1, f);
 	}
 };
-
