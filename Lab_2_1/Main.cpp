@@ -55,12 +55,18 @@ int main(int argc, char* argv[])
 		}
 		if (inpSym == '\b')
 		{
+			UI.HighlightUI(BKSP);
+			Sleep(25);
 			system("cls");
 			second = 0;
 			WR = EnterPath(WR, path);
 		}
 		if (inpSym == 27)
+		{
+			UI.HighlightUI(ESC);
+			Sleep(25);
 			IsExit = true;
+		}
 	}
 	system("cls");
 }

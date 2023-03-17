@@ -6,7 +6,9 @@ using namespace std;
 
 enum UIPart {
     LeftButt,
-    RightButt
+    RightButt,
+    BKSP,
+    ESC
 };
 
 class UIWriter
@@ -227,6 +229,12 @@ public:
             break;
         case RightButt:
             addHighlightedText(width - 4, height - 2, "->", scrBuff);
+            break;
+        case BKSP:
+            addHighlightedText((width / 3) * 2 - 10, height - 2, "BKSP - Change file", scrBuff);
+            break;
+        case ESC:
+            addHighlightedText(width / 3 - 6, height - 2, "ESC - exit", scrBuff);
             break;
         default:
             break;
